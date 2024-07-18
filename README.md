@@ -5,16 +5,23 @@ readme.md
 By default, WrenchOS will come with some commands.
 <br>
 To enable users to use these commands, add this to your server.cfg:
+<br>
     add_ace group.[GROUPNAME] WrenchOS.admincmds allow
+<br>
     Example: add_ace group.WrenchAdmin WrenchOS.admincmds allow
 <br>
 <br>
 Exports: ( For devs :) )
     exports.WrenchOS:changeJob(plrid, job)
+    <br>
     exports.WrenchOS:addMoney(plrid, "bank" | "cash", amount)
+    <br>
     exports.WrenchOS:withdrawMoney(plrid, "bank" | "cash", amount)
+    <br>
     exports.WrenchOS:getPlayer(plrid)
+    <br>
     exports.WrenchOS:spawnVehicle(coords, model)
+    <br>
     exports.WrenchOS:getPlayers()
 <br>
 THE MAIN FUNCTION OF WRENCHOS, IS THAT ALL OF THE EXPORTS WORK ON CLIENT AND SERVER
