@@ -6,9 +6,9 @@ By default, WrenchOS will come with some commands.
 <br>
 To enable users to use these commands, add this to your server.cfg:
 <br>
-    add_ace group.[GROUPNAME] WrenchOS.admincmds allow
+    <t>add_ace group.[GROUPNAME] WrenchOS.admincmds allow
 <br>
-    Example: add_ace group.WrenchAdmin WrenchOS.admincmds allow
+    <t>Example: add_ace group.WrenchAdmin WrenchOS.admincmds allow
 <br>
 <br>
 Exports: ( For devs :) )
