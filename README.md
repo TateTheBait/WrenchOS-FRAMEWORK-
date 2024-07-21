@@ -5,7 +5,9 @@ readme.md
 DEPENDENCIES:
 You will need Ox_lib and OxMySql for this framework.
 
-
+<br>
+Just FYI, this isn't a full framework yet, and can be added to any server.
+<br>
 
 By default, WrenchOS will come with some commands.
 <br>
