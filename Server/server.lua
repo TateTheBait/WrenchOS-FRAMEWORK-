@@ -107,10 +107,6 @@ AddEventHandler('playerDropped', function()
     dropplayer(source)
 end)
 
-for _, id in pairs(GetPlayers()) do
-    getplayer(id)
-end
-
 RegisterCommand("getbank", function(id)
     print(players[id].bank)
 end, false)
