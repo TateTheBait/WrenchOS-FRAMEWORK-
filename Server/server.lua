@@ -57,7 +57,7 @@ function createcharacter(plrid)
 
     local accounts = MySQL.query.await('SELECT `charid` FROM `wrenchaccounts`', {})
     local accountssum = 0
-    for _, asdf in pairs(accounts) do
+    for _, addsum in pairs(accounts) do
         accountssum += 1
     end
 
