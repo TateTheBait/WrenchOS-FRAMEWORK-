@@ -110,14 +110,3 @@ end)
 RegisterCommand("getbank", function(id)
     print(players[id].bank)
 end, false)
-
-
-
-
-RegisterCommand("changejob", function(source, args, rawCommand)
-    if IsPlayerAceAllowed(source, "WrenchOS.admincmds") then
-        TriggerClientEvent("chatMessage", source, "Output message! Permissions passed!")
-    else
-        TriggerClientEvent("chatMessage", source, "^1Insufficient Permissions.")
-    end
-end, true)
