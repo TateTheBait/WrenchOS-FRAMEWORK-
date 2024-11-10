@@ -16,8 +16,8 @@
 
 
 -- Dumping database structure for s6483_overextended
-CREATE DATABASE IF NOT EXISTS ``; /* YOUR DATABASE NAME */
-USE ``; /* YOUR DATABASE NAME */
+CREATE DATABASE IF NOT EXISTS `s6483_overextended`; /* YOUR DATABASE NAME */
+USE `s6483_overextended`; /* YOUR DATABASE NAME */
 
 -- Dumping structure for table s6483_overextended.wrenchaccounts
 CREATE TABLE IF NOT EXISTS `wrenchaccounts` (

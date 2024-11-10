@@ -11,5 +11,10 @@ shared_scripts {
     "config.lua",
     '@ox_lib/init.lua'
 }
+
+files {
+    'init.lua'
+}
+
 server_scripts {"Server/*"}
 client_scripts {"Client/*",}
