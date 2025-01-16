@@ -11,3 +11,5 @@ Config.startingBank = 2000
 Config.paycheckintervals = 20 -- MINUTES
 
 Config.oxinventory = true -- Do you have ox inventory (used for adding or removing cash from players)
+
+Config.useCharacters = true

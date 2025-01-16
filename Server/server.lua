@@ -15,33 +15,66 @@ players = {
 -- Player Data: identifier, idtoken, charid, firstname, lastname, cash, bank, plrid, job
 
 
-function updplayer(plrid, value, data)
+function updplayer(plrid, value, data, charid)
     plrid = tonumber(plrid)
 
     if plrid > 0 then
-        local identifier = GetPlayerIdentifier(plrid, 1)
-        for k,v in pairs(GetPlayerIdentifiers(plrid))do
-            if  string.sub(v, 1, string.len("discord:")) == "discord:"  then
-                identifier = v
+        if players[plrid] and not charid then
+            if players[plrid].charid then
+                MySQL.update.await('UPDATE wrenchaccounts SET ' .. value .. ' = ? WHERE charid = ?', {
+                    data, players[plrid].charid
+                })
+                TriggerEvent("WrenchOS:playerChanged", plrid)
+                TriggerClientEvent("WrenchOS:playerChanged", plrid)
+            else
+                local identifier = GetPlayerIdentifier(plrid, 1)
+                for k,v in pairs(GetPlayerIdentifiers(plrid))do
+                    if  string.sub(v, 1, string.len("discord:")) == "discord:"  then
+                        identifier = v
+                    end
+                end
+                MySQL.update.await('UPDATE wrenchaccounts SET ' .. value .. ' = ? WHERE identifier = ?', {
+                    data, identifier
+                })
+                TriggerEvent("WrenchOS:playerChanged", plrid)
+                TriggerClientEvent("WrenchOS:playerChanged", plrid)
             end
-        end
-        MySQL.update.await('UPDATE wrenchaccounts SET ' .. value .. ' = ? WHERE identifier = ?', {
-            data, identifier
-        })
-        TriggerEvent("WrenchOS:playerChanged", plrid)
-        TriggerClientEvent("WrenchOS:playerChanged", plrid)
-        if players[plrid] then
+    
             players[plrid][value] = data
         else
-            local account = MySQL.query.await('SELECT * FROM `wrenchaccounts` WHERE `identifier` = ?', {
-                identifier
-            })[1]
-            players[plrid] = account
-            players[plrid][value] = data
+            if charid then
+                MySQL.update.await('UPDATE wrenchaccounts SET ' .. value .. ' = ? WHERE charid = ?', {
+                    data, charid
+                })
+                local account = MySQL.query.await('SELECT * FROM `wrenchaccounts` WHERE `charid` = ?', {
+                    charid
+                })[1]
+                players[plrid] = account
+                players[plrid][value] = data
+            else
+                local account = MySQL.query.await('SELECT * FROM `wrenchaccounts` WHERE `identifier` = ?', {
+                    identifier
+                })[1]
+                players[plrid] = account
+                players[plrid][value] = data
+            end
         end
     end
 end
 
+function selectCharacter(charid, plrid, id)
+    local account = MySQL.query.await('SELECT * FROM `wrenchaccounts` WHERE `charid` = ?', {
+        charid
+    })[1]
+    players[plrid] = account
+    if Config.useCharacters == true  then
+        CreateThread(function ()
+            Wait(100)
+            TriggerEvent("WrenchOS:playerJoined", plrid)
+            TriggerClientEvent("WrenchOS:playerJoined", plrid)
+        end)
+    end
+end
 function dropplayer(plrid)
     plrid = tonumber(plrid)
     local identifier = GetPlayerIdentifier(plrid, 1)
@@ -63,7 +96,7 @@ function dropplayer(plrid)
     end
 end
 
-function createcharacter(plrid)
+function createcharacter(plrid, data)
     local identifier = GetPlayerIdentifier(plrid, 1)
     for k,v in pairs(GetPlayerIdentifiers(plrid))do
         if  string.sub(v, 1, string.len("discord:")) == "discord:"  then
@@ -85,14 +118,20 @@ function createcharacter(plrid)
         end
     end
     local charid = accountssum + 1 -- make charid 1 greater than the total amount of characters
-
-    
-    local created = MySQL.insert.await("INSERT INTO `wrenchaccounts` (identifier, idtoken, charid, firstname, lastname, cash, bank, plrid, job, inventory) VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'CIV', ?)", {
-        identifier, idtoken, charid, name, name, Config.startingCash, Config.startingBank, plrid, json.encode({{['name']='money',['slot']=1,['count']=2000}})
-    })
-
+    local created
+    if data then
+        created = MySQL.insert.await("INSERT INTO `wrenchaccounts` (identifier, idtoken, charid, firstname, lastname, cash, bank, plrid, job, inventory) VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'CIV', ?)",  {
+            identifier, idtoken, charid, data.firstname, data.lastname, Config.startingCash, Config.startingBank, plrid, json.encode({{['name']='money',['slot']=1,['count']=2000}})
+        })
+    else
+        created = MySQL.insert.await("INSERT INTO `wrenchaccounts` (identifier, idtoken, charid, firstname, lastname, cash, bank, plrid, job, inventory) VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'CIV', ?)", {
+            identifier, idtoken, charid, name, name, Config.startingCash, Config.startingBank, plrid, json.encode({{['name']='money',['slot']=1,['count']=2000}})
+        })
+    end
     if created then
         print("Account created for " .. name)
+        players[plrid] = nil
+        getplayer(plrid)
     else
         print("Failed to create account for " .. name)
     end
@@ -108,7 +147,7 @@ function getplayer(plrid)
     local account = MySQL.query.await('SELECT * FROM `wrenchaccounts` WHERE `identifier` = ?', {
         identifier
     })[1]
-    if account then
+    if account and Config.useCharacters == true then
         players[plrid] = account
         updplayer(plrid, "plrid", plrid)
         TriggerClientEvent("WrenchOS:PlayerChanged", plrid, players[plrid].firstname, 0)
@@ -116,21 +155,26 @@ function getplayer(plrid)
         createcharacter(plrid)
         
         updplayer(plrid, "plrid", plrid)
+    elseif Config.useCharacter == false then
+        TriggerClientEvent("WrenchOS:PlayerChanged", plrid, account.firstname, 0)
     end
 end
 
 RegisterNetEvent("WrenchOS:PlayerJoined", function(plrid)
     getplayer(plrid)
-    CreateThread(function ()
-        Wait(100)
-        TriggerEvent("WrenchOS:playerJoined", plrid)
-        TriggerClientEvent("WrenchOS:playerJoined", plrid)
-    end)
+    if Config.useCharacters == false  then
+        CreateThread(function ()
+            Wait(100)
+            TriggerEvent("WrenchOS:playerJoined", plrid, plrid)
+            TriggerClientEvent("WrenchOS:playerJoined", plrid, plrid)
+        end)
+    end
 end)
 
 AddEventHandler('playerDropped', function()
     dropplayer(source)
 end)
+
 AddEventHandler('onResourceStop', function(resourceName)
     if (GetCurrentResourceName() ~= resourceName) then
       return

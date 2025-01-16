@@ -65,3 +65,8 @@ exports("getPlayers", function()
     local val = lib.callback.await("wrenchos:clientGetPlayers", false, function(data) end)
     return val or false
 end)
+
+exports("changeRank", function(plrid, job)
+    local val = lib.callback.await("wrenchos:clientChangeRank", false, function(data) end, plrid, job)
+    return val or false
+end)

@@ -33,6 +33,10 @@ lib.callback.register("wrenchos:clientChangeJob", function (src, cb, plrid, jobn
     return exports.WrenchOS:changeJob(plrid, jobname)
 end)
 
+lib.callback.register("wrenchos:clientChangeRank", function (src, cb, plrid, jobname)
+    return exports.WrenchOS:changeRank(plrid, jobname)
+end)
+
 lib.callback.register("wrenchos:clientGetPlayers", function ()
     return exports.WrenchOS:getPlayers()
 end)
@@ -67,6 +71,21 @@ exports("addMoney", function(plrid, mtype, amount) -- plrid: a valid player ID |
         error(errorv)
     end
     return value
+end)
+
+exports("selectCharacter", function(charid, plrid)
+    selectCharacter(charid, plrid)
+end)
+
+exports("updateName", function(plrid, charid, data)
+    updplayer(plrid, "firstname", data.firstname, charid)
+    updplayer(plrid, "lastname", data.lastname, charid)
+    Wait(100)
+    getplayer(plrid)
+end)
+
+exports("createCharacter", function(plrid, data)
+    createcharacter(plrid, data)
 end)
 
 exports("withdrawMoney", function(plrid, mtype, amount) -- plrid: a valid player ID | mtype: "bank"/"cash" | amount: amount of money.
@@ -164,4 +183,24 @@ end)
 
 exports("getPlayers", function()
     return players
+end)
+
+exports("changeRank", function(plrid, job) -- plrid: Server Identifier | job: STRING
+    local value, errorv = pcall(function()
+        if type(job) == "string" then
+            if players[plrid] then
+                updplayer(plrid, "rank", job)
+                return true
+            else
+                error("Player Not Found.")
+            end
+        else
+            error("Rank was not a string.")
+        end
+    end)
+
+    if not value then
+        error(errorv)
+    end
+    return value
 end)
