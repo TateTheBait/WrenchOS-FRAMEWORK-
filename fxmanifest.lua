@@ -18,3 +18,8 @@ files {
 
 server_scripts {"Server/*"}
 client_scripts {"Client/*",}
+
+dependencies {
+    'oxmysql',
+    'ox_lib'
+}
