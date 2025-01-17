@@ -1,4 +1,4 @@
-TriggerServerEvent("WrenchOS:PlayerJoined", GetPlayerServerId(PlayerId()))
+TriggerServerEvent("WrenchOS_Script:PlayerJoined", GetPlayerServerId(PlayerId()))
 
 
 RegisterCommand("ostest1", function(src, args)

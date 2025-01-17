@@ -151,24 +151,32 @@ function getplayer(plrid)
         players[plrid] = account
         updplayer(plrid, "plrid", plrid)
         TriggerClientEvent("WrenchOS:PlayerChanged", plrid, players[plrid].firstname, 0)
+    elseif account and Config.useCharacters == false then
+        players[plrid] = account
+        updplayer(plrid, "plrid", plrid)
+        TriggerClientEvent("WrenchOS:PlayerChanged", plrid, account.firstname, 0)
     elseif not account then
         createcharacter(plrid)
         
         updplayer(plrid, "plrid", plrid)
-    elseif Config.useCharacter == false then
-        TriggerClientEvent("WrenchOS:PlayerChanged", plrid, account.firstname, 0)
     end
 end
 
-RegisterNetEvent("WrenchOS:PlayerJoined", function(plrid)
+local function plrjoined(plrid)
     getplayer(plrid)
     if Config.useCharacters == false  then
         CreateThread(function ()
-            Wait(100)
+            while not players[plrid] do
+                Wait(0)
+            end
             TriggerEvent("WrenchOS:playerJoined", plrid, plrid)
             TriggerClientEvent("WrenchOS:playerJoined", plrid, plrid)
         end)
     end
+end
+
+RegisterNetEvent("WrenchOS_Script:PlayerJoined", function ()
+    plrjoined(source)
 end)
 
 AddEventHandler('playerDropped', function()
