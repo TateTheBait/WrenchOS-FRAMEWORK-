@@ -10,3 +10,5 @@ WrenchOS = setmetatable({}, {
         return self[index]
     end
 })
+
+return WrenchOS
