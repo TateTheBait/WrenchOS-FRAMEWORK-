@@ -9,12 +9,12 @@ MORE INFO AT <a>https://tatethebait.github.io/WrenchOSdocs/</a>
 
 
 (IT SHOULD AUTO-INSTALL THE SQL. IF IT DOESN'T IT COMES WITH THE FILE.)
+<br><br>
 
-
-Exports: ( For devs :) )
-    exports.WrenchOS:changeJob(plrid, job)
-    exports.WrenchOS:addMoney(plrid, "bank" | "cash", amount)
-    exports.WrenchOS:withdrawMoney(plrid, "bank" | "cash", amount)
-    exports.WrenchOS:getPlayer(plrid)
-    exports.WrenchOS:spawnVehicle(coords, model)
+Exports: ( For devs :) )<br>
+    exports.WrenchOS:changeJob(plrid, job)<br>
+    exports.WrenchOS:addMoney(plrid, "bank" | "cash", amount)<br>
+    exports.WrenchOS:withdrawMoney(plrid, "bank" | "cash", amount)<br>
+    exports.WrenchOS:getPlayer(plrid)<br>
+    exports.WrenchOS:spawnVehicle(coords, model)<br>
     exports.WrenchOS:getPlayers()
