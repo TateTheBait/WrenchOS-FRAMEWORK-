@@ -4,8 +4,8 @@ CREATE TABLE IF NOT EXISTS `wrenchaccounts` (
   `charid` int(11) DEFAULT NULL,
   `firstname` varchar(50) DEFAULT '',
   `lastname` varchar(50) DEFAULT NULL,
-  `cash` int(11) DEFAULT NULL,
-  `bank` int(11) DEFAULT NULL,
+  `cash` int(36) DEFAULT NULL,
+  `bank` int(36) DEFAULT NULL,
   `plrid` int(11) DEFAULT NULL,
   `job` varchar(20) DEFAULT 'CIV',
   `inventory` longtext DEFAULT NULL,
@@ -30,3 +30,4 @@ CREATE TABLE IF NOT EXISTS `vehicles` (
   KEY `FK_vehicles_characters` (`owner`) USING BTREE,
   KEY `FK_vehicles_groups` (`group`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
