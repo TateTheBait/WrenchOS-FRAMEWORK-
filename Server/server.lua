@@ -191,8 +191,8 @@ MySQL.ready(function()
             `charid` int(11) DEFAULT NULL,
             `firstname` varchar(50) DEFAULT '',
             `lastname` varchar(50) DEFAULT NULL,
-            `cash` int(36) DEFAULT NULL,
-            `bank` int(36) DEFAULT NULL,
+            `cash` int(10) DEFAULT NULL,
+            `bank` int(10) DEFAULT NULL,
             `plrid` int(11) DEFAULT NULL,
             `job` varchar(20) DEFAULT 'CIV',
             `inventory` longtext DEFAULT NULL,
@@ -238,4 +238,5 @@ end)
 RegisterCommand("getbank", function(id)
     print(players[id].bank)
 end, false)
+
 
