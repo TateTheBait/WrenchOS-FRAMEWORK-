@@ -51,7 +51,7 @@ exports("addMoney", function(plrid, mtype, amount) -- plrid: a valid player ID |
                 return false
             end
             if string.lower(mtype) == "cash" or mtype == "bank" then
-                local newamt = players[plrid][mtype] + amount
+                local newamt = math.min(players[plrid][mtype] + amount, 2147483646)
                 updplayer(plrid, mtype, newamt)
                 if Config.ox_inventory == true and mtype == "cash"  then
                     exports.ox_inventory:AddItem(plrid, "cash", amount)
@@ -96,7 +96,7 @@ exports("withdrawMoney", function(plrid, mtype, amount) -- plrid: a valid player
                 return false
             end
             if mtype == "cash" or mtype == "bank" then
-                local newamt = players[plrid][mtype] - amount
+                local newamt = math.min(players[plrid][mtype] - amount, 2147483646)
                 if newamt >= 0 then
                     updplayer(plrid, mtype, newamt)
                     if Config.ox_inventory == true and mtype == "cash" then
@@ -203,4 +203,5 @@ exports("changeRank", function(plrid, job) -- plrid: Server Identifier | job: ST
         error(errorv)
     end
     return value
+
 end)
